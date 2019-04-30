@@ -1,23 +1,23 @@
 'use strict';
+// В данном файле храним все перемены и события на них
 (function () {
     var list = document.querySelector('.list'); // собственно сам лист
 
-    var listToggle = list.querySelector('.list__toggle'); // кнопка отображения/скрытия поля ввода To-Do
     window.additional__field = list.querySelector('.list__add-field'); // блок ввода To-Do
     window.additional__input = list.querySelector('.list__add-field input'); // поле ввдоа To-Do
-
     window.listItems = list.querySelector('.list__items');  // Список To-Do
+    window.template = document.querySelector('#template-item').content.querySelector('.list__item');
+
+    var listToggle = list.querySelector('.list__toggle'); // кнопка отображения/скрытия поля ввода To-Do
     var listItem = list.querySelectorAll('.list__item');  // Коллекция итемов To-Do
     var itemDelete = list.querySelectorAll('.list__item svg'); // Коллекция кнопочек To-Do
-
-    window.template = document.querySelector('#template-item').content.querySelector('.list__item');
 
     var addButton = list.querySelector('.list__btn--add');
     var saveButton = list.querySelector('.list__btn--save');
     var clearButton = list.querySelector('.list__btn--clear');
 
     // При загрузки страницы проверям данные и localStorage и в случае наличия сохраненных To-Do отрисовываем их
-    window.renderItemsFromStorage();
+    window.getStorage();
 
     // По нажатию отображаем/скрываем поле To-Do
     listToggle.addEventListener('click', window.listToggleHandler);

@@ -1,3 +1,4 @@
+// В данном файле все обработчики событий
 (function () {
     // Функция изменяем значение аттрибута done
     function doneToggle(item) {
@@ -45,9 +46,28 @@
         window.additional__input.value = '';
     };
 
+    // Функция удаляет все To-Do из DOM
     window.removeAllItems = function () {
         while (window.listItems.firstChild) {
             window.listItems.removeChild(window.listItems.firstChild);
+        }
+    };
+
+    window.renderDataFromStorage = function (items) {
+        if (items) {
+            items.forEach(function (item) {
+                var renderItem = window.template.cloneNode(true);
+                var renderSpan = renderItem.querySelector('span');
+                var renderDel = renderItem.querySelector('svg');
+                renderSpan.textContent = item.val;
+                window.itemClickHandler(renderSpan);
+                window.deleteItemHandler(renderDel);
+                window.listItems.appendChild(renderItem);
+                renderItem.setAttribute('done', item.done);
+                if (item.done === 'true') {
+                    renderItem.classList.add('done');
+                }
+            });
         }
     };
 
