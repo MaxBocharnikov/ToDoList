@@ -9,8 +9,9 @@
     window.deleteItemHandler = function(del) {
         del.addEventListener('click', function () {
             deleteItem(del);
+            window.onItemsChangeHandler();
         });
-    }
+    };
 
     // Функция добавляем/убираем класс done
     window.itemClickHandler = function(item) {
@@ -33,17 +34,19 @@
             item.setAttribute('done', 'false');
             additional__input.value = '';
         }
+        window.onItemsChangeHandler();
     };
 
     // Функция удаления To-Do
     window.deleteItem = function(del) {
         del.parentNode.parentNode.removeChild(del.parentNode);
-    }
+    };
 
     // Функция отображает/скрывает инпут
     window.listToggleHandler = function () {
         window.additional__field.classList.toggle('hidden');
         window.additional__input.value = '';
+        window.onItemsChangeHandler();
     };
 
     // Функция удаляет все To-Do из DOM
@@ -51,23 +54,14 @@
         while (window.listItems.firstChild) {
             window.listItems.removeChild(window.listItems.firstChild);
         }
+        window.onItemsChangeHandler();
     };
 
-    window.renderDataFromStorage = function (items) {
-        if (items) {
-            items.forEach(function (item) {
-                var renderItem = window.template.cloneNode(true);
-                var renderSpan = renderItem.querySelector('span');
-                var renderDel = renderItem.querySelector('svg');
-                renderSpan.textContent = item.val;
-                window.itemClickHandler(renderSpan);
-                window.deleteItemHandler(renderDel);
-                window.listItems.appendChild(renderItem);
-                renderItem.setAttribute('done', item.done);
-                if (item.done === 'true') {
-                    renderItem.classList.add('done');
-                }
-            });
+    window.onItemsChangeHandler = function () {
+        if (window.listItems.childElementCount > 0) {
+            window.listEmpty.classList.add('hidden');
+        } else {
+            window.listEmpty.classList.remove('hidden');
         }
     };
 

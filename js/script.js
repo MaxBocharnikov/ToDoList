@@ -7,6 +7,7 @@
     window.additional__input = list.querySelector('.list__add-field input'); // поле ввдоа To-Do
     window.listItems = list.querySelector('.list__items');  // Список To-Do
     window.template = document.querySelector('#template-item').content.querySelector('.list__item');
+    window.listEmpty = list.querySelector('.list__empty'); // span, отображающийся в момент отсутсвия итемов
 
     var listToggle = list.querySelector('.list__toggle'); // кнопка отображения/скрытия поля ввода To-Do
     var listItem = list.querySelectorAll('.list__item');  // Коллекция итемов To-Do
@@ -15,6 +16,7 @@
     var addButton = list.querySelector('.list__btn--add');
     var saveButton = list.querySelector('.list__btn--save');
     var clearButton = list.querySelector('.list__btn--clear');
+
 
     // При загрузки страницы проверям данные и localStorage и в случае наличия сохраненных To-Do отрисовываем их
     window.getStorage();
@@ -32,6 +34,7 @@
     clearButton.addEventListener('click', function() {
         window.removeAllItems();
         window.clearStorage();
+        window.onItemsChangeHandler();
     });
 
     //  По нажатию на итема добавляем/убираем перечеркивание
