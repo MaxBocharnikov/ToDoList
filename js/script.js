@@ -3,35 +3,46 @@
     var list = document.querySelector('.list'); // собственно сам лист
 
     var listToggle = list.querySelector('.list__toggle'); // кнопка отображения/скрытия поля ввода To-Do
-    var additional__field = list.querySelector('.list__add-field'); // блок ввода To-Do
-    var additional__input = list.querySelector('.list__add-field input'); // поле ввдоа To-Do
+    window.additional__field = list.querySelector('.list__add-field'); // блок ввода To-Do
+    window.additional__input = list.querySelector('.list__add-field input'); // поле ввдоа To-Do
 
-    var listItems = list.querySelector('.list__items');  // Список To-Do
+    window.listItems = list.querySelector('.list__items');  // Список To-Do
     var listItem = list.querySelectorAll('.list__item');  // Коллекция итемов To-Do
     var itemDelete = list.querySelectorAll('.list__item svg'); // Коллекция кнопочек To-Do
+
+    window.template = document.querySelector('#template-item').content.querySelector('.list__item');
 
     var addButton = list.querySelector('.list__btn--add');
     var saveButton = list.querySelector('.list__btn--save');
     var clearButton = list.querySelector('.list__btn--clear');
 
+    // При загрузки страницы проверям данные и localStorage и в случае наличия сохраненных To-Do отрисовываем их
+    window.renderItemsFromStorage();
+
     // По нажатию отображаем/скрываем поле To-Do
-    listToggle.addEventListener('click',function (e) {
-        e.preventDefault();
-        additional__field.classList.toggle('hidden');
-        additional__input.value = '';
-    });
+    listToggle.addEventListener('click', window.listToggleHandler);
 
     // По нажатию на кнопку Add добавляем новый To-Do
-    addButton.addEventListener('click', addNewItem);
+    addButton.addEventListener('click', window.addNewItem);
+
+    // По нажатию на Save сохраняем значения в localStorage
+    saveButton.addEventListener('click', window.setStorage);
+
+    // По нажатию на Clear очищаем localStorage
+    clearButton.addEventListener('click', function() {
+        window.removeAllItems();
+        window.clearStorage();
+    });
 
     //  По нажатию на итема добавляем/убираем перечеркивание
+    // Изменяем значение done
     listItem.forEach(function (item) {
-        itemClickHandler(item);
+        window.itemClickHandler(item);
     });
 
     // По нажатию на иконку корзины удаляем To-Do
     itemDelete.forEach(function (del) {
-        deleteItemHandler(del);
+        window.deleteItemHandler(del);
     });
 
     // По нажатию на Enter добавляем новый To-Do
@@ -40,40 +51,4 @@
             addNewItem();
         }
     });
-
-
-    // Функция добавления нового To-Do
-    function addNewItem() {
-        if (additional__input.value) {
-            var template = document.querySelector('#template-item').content.querySelector('.list__item');
-            var item = template.cloneNode(true);
-            var itemSpan = item.querySelector('span');
-            var itemDel = item.querySelector('svg');
-            itemSpan.textContent = additional__input.value;
-            itemClickHandler(itemSpan);
-            deleteItemHandler(itemDel);
-            listItems.appendChild(item);
-            additional__input.value = '';
-        }
-    }
-
-    // Функция-обработчик удаления To-Do
-    function deleteItemHandler(del) {
-        del.addEventListener('click', function () {
-            deleteItem(del);
-        });
-    }
-
-    // Функция добавляем/убираем класс done
-    function itemClickHandler(item) {
-      item.addEventListener('click', function () {
-         item.classList.toggle('done');
-      });
-    };
-
-    // Функция удаления To-Do
-    function deleteItem(del) {
-        del.parentNode.parentNode.removeChild(del.parentNode);
-    }
-
 })();
